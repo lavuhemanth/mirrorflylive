@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mirrorfly Live</title>
+    <link rel="icon" href="./images/mirrorfly-logo.webp">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+
+    <style>
+
+        .nav-tabs a {
+            color: gray;
+            font-weight: bold;
+        }
+        .player-wrapper {
+        margin: 0 auto;
+        width: 1280px;
+      }
+    </style>    <script src="https://cdn.jsdelivr.net/npm/dashjs@latest/dist/dash.all.debug.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest/dist/hls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dashjs@latest/dist/dash.all.debug.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/ovenplayer/dist/ovenplayer.js"></script>
+  </head>
+  <body>
+    <div id="app">
+       <nav class="navbar navbar-expand-md navbar-light bg-light">
+        <div class="container-lg">
+            <a class="navbar-brand" href="/"><img src="./images/mirrorfly-logo.webp" height="25px" width="25px" alt="logo" /> Mirrorfly Live</a>
+            <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarNav" aria-controls="navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+            </div>
+        </div>
+
+    </nav>
+      <!-- Wrapper element for sizing or positioning the player -->
+      <div class="player-wrapper">
+        <!-- OvenPlayer will be initialized inside this element. -->
+        <div id="player_id"></div>
+      </div>
+      <div id="error_key"></div>
+    </div>
+
+    <script>
+        window.onload = () => {
+        let error_key = document.getElementById("error_key");
+        let secrate_key;
+        let location;
+
+        const params = new URLSearchParams(window.location.search);
+        console.log('Params :: ', params.get('secrete_key'))
+        if (params.get('secrete_key')) {
+          secrete_key = params.get('secrete_key');
+          error_key.innerHTML = "";
+        } else {
+          error_key.innerHTML =
+            "Secrete Key is missing. Please check with content publisher..";
+        }
+
+        location = `wss://${window.location.hostname}:3334/app/${secrete_key}`;
+        if (window.location.hostname !== 'transcoding.mirrorfly.com') {
+            location = `wss://transcoding.mirrorfly.com:3334/app/${secrete_key}`;
+        }
+
+
+        const player = OvenPlayer.create("player_id", {
+          sources: [
+            {
+              label: "webRTC",
+              // Set the type to 'webrtc'
+              type: "webrtc",
+              // Set the file to WebRTC Signaling URL with OvenMediaEngine
+              file: location,
+            },
+            {
+              label: "MP4",
+              // Set the type to 'webrtc'
+              type: "mp4",
+              // Set the file to WebRTC Signaling URL with OvenMediaEngine
+              file: location,
+            },
+            {
+              label: "DASH",
+              // Set the type to 'webrtc'
+              type: "dash",
+              // Set the file to WebRTC Signaling URL with OvenMediaEngine
+              file: location,
+            },
+            {
+              label: "HLS",
+              // Set the type to 'webrtc'
+              type: "hls",
+              // Set the file to WebRTC Signaling URL with OvenMediaEngine
+              file: location,
+            },
+          ],
+        });
+      };
+
+      // Initialize OvenPlayer
+    </script>
+  </body>
+</html>
