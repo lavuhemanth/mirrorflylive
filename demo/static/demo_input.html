@@ -669,7 +669,7 @@
     plyUrl = `http://${window.location.hostname}/live?secrete_key=${rKey}`;
     if (window.location.hostname !== 'transcoding.mirrorfly.com') {
         wsURL = `wss://transcoding.mirrorfly.com:3334/app/${rKey}?direction=send`;
-        plyUrl = `http://${window.location.hostname}:4001/live?secrete_key=${rKey}`;
+        plyUrl = `http://${window.location.hostname}/live?secrete_key=${rKey}`;
     }
     localStorage.setItem('savedWebRtcUrl',  wsURL);
      
